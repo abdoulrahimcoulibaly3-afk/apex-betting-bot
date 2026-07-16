@@ -7,7 +7,7 @@ from telegram.ext import (
     ContextTypes,
 )
 
-BOT_TOKEN = os.getenv("BOT_TOKEN")
+BOT_TOKEN = os.environ["BOT_TOKEN"]
 
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -21,8 +21,7 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     ]
 
     await update.message.reply_text(
-        "🏆 Bienvenue sur APEX BETTING\n\n"
-        "Choisissez une option ci-dessous :",
+        "🏆 Bienvenue sur APEX BETTING\n\nChoisissez une option :",
         reply_markup=InlineKeyboardMarkup(keyboard),
     )
 
@@ -37,21 +36,17 @@ async def buttons(update: Update, context: ContextTypes.DEFAULT_TYPE):
         "vip": "💎 Rejoignez notre offre VIP.",
         "bonus": "🎁 Consultez les bonus disponibles.",
         "resultats": "📊 Résultats publiés régulièrement.",
-        "contact": "📞 Contact : @ApexBettingSupport",
+        "contact": "📞 Support : @ApexBettingSupport",
     }
 
     await query.edit_message_text(messages.get(query.data, "Option inconnue."))
 
 
-def main():
-    app = Application.builder().token(BOT_TOKEN).build()
+app = Application.builder().token(BOT_TOKEN).build()
 
-    app.add_handler(CommandHandler("start", start))
-    app.add_handler(CallbackQueryHandler(buttons))
+app.add_handler(CommandHandler("start", start))
+app.add_handler(CallbackQueryHandler(buttons))
 
-    print("Bot lancé...")
-    app.run_polling()
+print("Bot lancé...")
 
-
-if __name__ == "__main__":
-    main()
+app.run_polling()
